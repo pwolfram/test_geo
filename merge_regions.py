@@ -1,47 +1,59 @@
 #!/usr/bin/env python
 
+"""
+
+This script has two modes of usage:
+1. To create a new file (regions.geojson) containing one or more regions that
+are pointed to using the -r or -d flags.
+
+2. To append one or more regions on an already existing regions.geojson file,
+again defined by the -r and -d flags.
+
+The usage mode is automatically detected for you, depending on if the
+regions.geojson file exists or not before calling this script.
+
+"""
+
 import sys, os, glob, shutil, numpy
 import json
-from optparse import OptionParser
+import argparse
 from region_utils.region_write_utils import *
 
-parser = OptionParser()
-parser.add_option("-a", "--append_file", dest="append_file", help="File to append to", metavar="FILE")
-parser.add_option("-r", "--region_file", dest="region_file", help="Region file to append", metavar="FILE")
-parser.add_option("-d", "--region_directory", dest="region_dir", help="Directory containing multiple region files", metavar="PATH")
+parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawTextHelpFormatter)
+parser.add_argument("-r", "--region_file", dest="region_file", help="Single region file to append to regions.geojson", metavar="FILE")
+parser.add_argument("-d", "--region_directory", dest="region_dir", help="Directory containing multiple region files, each will be appended to regions.geojson", metavar="PATH")
 
-options, args = parser.parse_args()
+args = parser.parse_args()
 
-if not options.append_file:
-	parser.error('A file that will be appended is required.')
-
-if not options.region_file and not options.region_dir:
+if not args.region_file and not args.region_dir:
 	parser.error('Either a region file (-r) or a region directory (-d) is required.')
 
-if options.region_dir:
-	if not os.path.exists(options.region_dir):
-		parser.error('The path %s does not exist.'%(options.region_dir))
+if args.region_dir:
+	if not os.path.exists(args.region_dir):
+		parser.error('The path %s does not exist.'%(args.region_dir))
 
-if options.region_file:
-	if not os.path.exists(options.region_file):
-		parser.error('The file %s does not exist.'%(options.region_file))
+if args.region_file:
+	if not os.path.exists(args.region_file):
+		parser.error('The file %s does not exist.'%(args.region_file))
+
+file_to_append = "regions.geojson"
 
 new_file = True
 first_feature = True
-if os.path.exists(options.append_file):
+if os.path.exists(file_to_append):
 	new_file = False
-	with open(options.append_file) as f:
+	with open(file_to_append) as f:
 		appended_file = json.load(f)
 		first_feature = False
 
-out_file = open(options.append_file, 'w')
+out_file = open(file_to_append, 'w')
 
 out_file.write('{"type": "FeatureCollection",\n')
 out_file.write(' "features":\n')
 out_file.write('\t[\n')
 
-if options.region_file:
-	with open(options.region_file) as f:
+if args.region_file:
+	with open(args.region_file) as f:
 		region_file = json.load(f)
 
 		for feature in region_file['features']:
@@ -55,8 +67,8 @@ if options.region_file:
 
 		del region_file
 
-if options.region_dir:
-	for (dirpath, dirnames, filenames) in os.walk(options.region_dir):
+if args.region_dir:
+	for (dirpath, dirnames, filenames) in os.walk(args.region_dir):
 		for filename in sorted(filenames):
 			with open('%s/%s'%(dirpath, filename), 'r') as f:
 				region_file = json.load(f)

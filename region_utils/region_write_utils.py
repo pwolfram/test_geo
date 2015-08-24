@@ -17,10 +17,23 @@ def write_single_region(feature, out_file, base_indent):#{{{
 	out_file.write('%s "properties": {\n'%(base_indent))
 
 	# Write out properties
-	out_file.write('%s\t"name": "%s",\n'%(base_indent, feature['properties']['name']))
-	out_file.write('%s\t"component": "%s",\n'%(base_indent, feature['properties']['component']))
+	try:
+		out_file.write('%s\t"name": "%s",\n'%(base_indent, feature['properties']['name']))
+	except:
+		print "There was an error getting the name property from a feature. Existing...\n"
+		quit(1)
 
-	feature_type = feature['geometry']['type']
+	try:
+		out_file.write('%s\t"component": "%s",\n'%(base_indent, feature['properties']['component']))
+	except:
+		print "Region %s has an issue with the component property. Exiting...\n"%(feature['properties']['component'])
+		quit(1)
+
+	try:
+		feature_type = feature['geometry']['type']
+	except:
+		print "Region: %s has an issue with the type of geometry. Exiting...\n"%(feature['properties']['name'])
+		quit(1)
 
 	# Determine object property value based on feature type.
 	if feature_type == "Polygon" or feature_type == "MultiPolygon":
