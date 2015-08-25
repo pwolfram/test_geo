@@ -1,8 +1,16 @@
 #!/usr/bin/env python
 """
-Script to plot regions.geojson file via basemap
-Phillip J. Wolfram
-08/25/2015
+This script plots a file containing multiple regions onto a basemap using
+matplotlib's basemap.
+
+It requires basemap: http://matplotlib.org/basemap/
+
+The -r flag is used to pass in a regions file that will be plotted, and the -o
+flag can optionally be used to specify the name of the image that will be
+generated.
+
+Author: Phillip J. Wolfram
+Date: 08/25/2015
 """
 
 import numpy as np
@@ -83,19 +91,19 @@ def plot_regions_file(regionfile, plotname):
 
 
 if __name__ == "__main__":
-    from optparse import OptionParser
-    parser = OptionParser()
-    parser.add_option("-r", "--regions_file", dest="regions_file", help="Region file to plot", metavar="FILE")
-    parser.add_option("-o", "--regions_plot", dest="regions_plotname", help="Region plot filename", metavar="FILE")
+    import argparse
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawTextHelpFormatter)
+    parser.add_argument("-r", "--regions_file", dest="regions_file", help="Region file to plot", metavar="FILE", required=True)
+    parser.add_argument("-o", "--regions_plot", dest="regions_plotname", help="Region plot filename", metavar="FILE")
 
-    options, args = parser.parse_args()
+    args = parser.parse_args()
 
-    if not options.regions_file:
+    if not args.regions_file:
         parser.error("A region file is required.")
     
-    if not options.regions_plotname:
-        options.regions_plotname = 'plot_' + options.regions_file.strip('.*') + '.png'
+    if not args.regions_plotname:
+        args.regions_plotname = 'plot_' + args.regions_file.strip('.*') + '.png'
 
-    plot_regions_file(options.regions_file, options.regions_plotname)
+    plot_regions_file(args.regions_file, args.regions_plotname)
 
 
