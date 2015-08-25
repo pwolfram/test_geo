@@ -1,3 +1,4 @@
 regions.geojson
 *.nc
 *.pyc
+*.png
