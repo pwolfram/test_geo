@@ -59,15 +59,18 @@ def plot_regions_file(regionfile, plotname):
             region = feature['properties']['name']
 
             map = plot_base(maptype)
-            if polytype == 'MultiPolygon':
-                for poly in coords:
-                    points = np.asarray(poly)
+            try:
+                if polytype == 'MultiPolygon':
+                    for poly in coords:
+                        points = np.asarray(poly)
+                        map.plot(points[:,0], points[:,1], linewidth=2.0, color='r',latlon=True)
+                elif polytype == 'Polygon':
+                    points = np.asarray(coords)
                     map.plot(points[:,0], points[:,1], linewidth=2.0, color='r',latlon=True)
-            elif polytype == 'Polygon':
-                points = np.asarray(coords)
-                map.plot(points[:,0], points[:,1], linewidth=2.0, color='r',latlon=True)
-            else:
-                assert False, 'Geometry %s not known.'%(polytype)
+                else:
+                    assert False, 'Geometry %s not known.'%(polytype)
+            except:
+                print 'Error plotting %s for map type %s'%(region, maptype)
     print 'saving ' + plotname 
     plt.savefig(plotname)
 
