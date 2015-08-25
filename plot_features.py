@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 """
-This script plots a file containing multiple regions onto a basemap using
+This script plots a file containing multiple features onto a basemap using
 matplotlib's basemap.
 
 It requires basemap: http://matplotlib.org/basemap/
 
-The -r flag is used to pass in a regions file that will be plotted, and the -o
+The -r flag is used to pass in a features file that will be plotted, and the -o
 flag can optionally be used to specify the name of the image that will be
 generated.
 
@@ -53,10 +53,10 @@ def plot_base(maptype): #{{{
     return map #}}}
   
 
-def plot_regions_file(regionfile, plotname):
+def plot_features_file(featurefile, plotname):
     # open up the database
-    with open(regionfile) as f:
-        regiondat = json.load(f)
+    with open(featurefile) as f:
+        featuredat = json.load(f)
 
 	colors = ['blue', 'green', 'red', 'cyan', 'magenta', 'yellow', 'black']
 
@@ -64,26 +64,26 @@ def plot_regions_file(regionfile, plotname):
     for anum, maptype in enumerate(['mill2','mill', 'northpole', 'southpole']):
         ax = fig.add_subplot(2,2,1+anum)
         feature_num = 0
-        for feature in regiondat['features']:
+        for feature in featuredat['features']:
             polytype = feature['geometry']['type']
             coords = feature['geometry']['coordinates']
-            region = feature['properties']['name']
+            feature = feature['properties']['name']
 
             color_num = feature_num % len(colors)
 
             map = plot_base(maptype)
             try:
-                if polytype == 'MultiPolygon':
+                if polytype == 'MultiPolygon' or polytype == 'MultiLineString':
                     for poly in coords:
                         points = np.asarray(poly)
                         map.plot(points[:,0], points[:,1], linewidth=2.0, color=colors[color_num],latlon=True)
-                elif polytype == 'Polygon':
+                elif polytype == 'Polygon' or polytype == 'LineString':
                     points = np.asarray(coords)
                     map.plot(points[:,0], points[:,1], linewidth=2.0, color=colors[color_num],latlon=True)
                 else:
                     assert False, 'Geometry %s not known.'%(polytype)
             except:
-                print 'Error plotting %s for map type %s'%(region, maptype)
+                print 'Error plotting %s for map type %s'%(feature, maptype)
 
             feature_num = feature_num + 1
     print 'saving ' + plotname 
@@ -93,17 +93,14 @@ def plot_regions_file(regionfile, plotname):
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawTextHelpFormatter)
-    parser.add_argument("-r", "--regions_file", dest="regions_file", help="Region file to plot", metavar="FILE", required=True)
-    parser.add_argument("-o", "--regions_plot", dest="regions_plotname", help="Region plot filename", metavar="FILE")
+    parser.add_argument("-f", "--features_file", dest="features_file", help="Feature file to plot", metavar="FILE", required=True)
+    parser.add_argument("-o", "--features_plot", dest="features_plotname", help="Feature plot filename", metavar="FILE")
 
     args = parser.parse_args()
 
-    if not args.regions_file:
-        parser.error("A region file is required.")
-    
-    if not args.regions_plotname:
-        args.regions_plotname = 'plot_' + args.regions_file.strip('.*') + '.png'
+    if not args.features_plotname:
+        args.features_plotname = args.features_file.strip('.*') + '_plot.png'
 
-    plot_regions_file(args.regions_file, args.regions_plotname)
+    plot_features_file(args.features_file, args.features_plotname)
 
 
