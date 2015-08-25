@@ -50,27 +50,34 @@ def plot_regions_file(regionfile, plotname):
     with open(regionfile) as f:
         regiondat = json.load(f)
 
+	colors = ['blue', 'green', 'red', 'cyan', 'magenta', 'yellow', 'black']
+
     fig = plt.figure(figsize=(16,12),dpi=100)
-    for anum, maptype in enumerate(['northpole','mill2','mill', 'southpole']):
+    for anum, maptype in enumerate(['mill2','mill', 'northpole', 'southpole']):
         ax = fig.add_subplot(2,2,1+anum)
+        feature_num = 0
         for feature in regiondat['features']:
             polytype = feature['geometry']['type']
             coords = feature['geometry']['coordinates']
             region = feature['properties']['name']
+
+            color_num = feature_num % len(colors)
 
             map = plot_base(maptype)
             try:
                 if polytype == 'MultiPolygon':
                     for poly in coords:
                         points = np.asarray(poly)
-                        map.plot(points[:,0], points[:,1], linewidth=2.0, color='r',latlon=True)
+                        map.plot(points[:,0], points[:,1], linewidth=2.0, color=colors[color_num],latlon=True)
                 elif polytype == 'Polygon':
                     points = np.asarray(coords)
-                    map.plot(points[:,0], points[:,1], linewidth=2.0, color='r',latlon=True)
+                    map.plot(points[:,0], points[:,1], linewidth=2.0, color=colors[color_num],latlon=True)
                 else:
                     assert False, 'Geometry %s not known.'%(polytype)
             except:
                 print 'Error plotting %s for map type %s'%(region, maptype)
+
+            feature_num = feature_num + 1
     print 'saving ' + plotname 
     plt.savefig(plotname)
 
