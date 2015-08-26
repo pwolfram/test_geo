@@ -57,6 +57,13 @@ def write_single_feature(feature, out_file, base_indent):#{{{
 		out_file.write('%s\t\t\t[\n'%(base_indent))
 		indentation = '%s\t\t\t\t'%(base_indent)
 		poly_list = feature['geometry']['coordinates']
+	elif feature_type == "Point":
+		indentation = '\t\t\t'
+		poly_list = []
+		point_list = []
+		point_list.append(feature['geometry']['coordinates'])
+		poly_list.append(point_list)
+		del point_list
 	else:
 		indentation = '\t\t\t'
 		poly_list = []
