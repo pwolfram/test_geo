@@ -51,6 +51,22 @@ def plot_base(maptype): #{{{
 		map = Basemap(projection='ortho', lat_0=-90, lon_0=-100, resolution='l')
 		map.drawmeridians(np.arange(0,360,30))
 		map.drawparallels(np.arange(-90,90,30))
+	elif maptype == 'atlantic':
+		map = Basemap(projection='ortho', lat_0=0, lon_0=0, resolution='l')
+		map.drawmeridians(np.arange(0,360,30))
+		map.drawparallels(np.arange(-90,90,30))
+	elif maptype == 'pacific':
+		map = Basemap(projection='ortho', lat_0=0, lon_0=-180, resolution='l')
+		map.drawmeridians(np.arange(0,360,30))
+		map.drawparallels(np.arange(-90,90,30))
+	elif maptype == 'europe':
+		map = Basemap(projection='ortho', lat_0=0, lon_0=-90, resolution='l')
+		map.drawmeridians(np.arange(0,360,30))
+		map.drawparallels(np.arange(-90,90,30))
+	elif maptype == 'northamerica':
+		map = Basemap(projection='ortho', lat_0=0, lon_0=90, resolution='l')
+		map.drawmeridians(np.arange(0,360,30))
+		map.drawparallels(np.arange(-90,90,30))
 	else:
 		raise NameError("Didn't select a valid maptype!")
 
