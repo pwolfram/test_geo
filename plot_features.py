@@ -59,6 +59,7 @@ def plot_features_file(featurefile, plotname):
 		featuredat = json.load(f)
 
 	colors = ['blue', 'green', 'red', 'cyan', 'magenta', 'yellow', 'black']
+        markers = ['o', 's', 'v', '^', '>', '<', '*', 'p', 'D', 'h']
 
 	fig = plt.figure(figsize=(16,12),dpi=100)
 	for anum, maptype in enumerate(['mill2','mill', 'northpole', 'southpole']):
@@ -70,6 +71,7 @@ def plot_features_file(featurefile, plotname):
 			feature = feature['properties']['name']
 
 			color_num = feature_num % len(colors)
+			marker_num = feature_num % len(markers)
 
 			map = plot_base(maptype)
 			try:
@@ -82,7 +84,7 @@ def plot_features_file(featurefile, plotname):
 					map.plot(points[:,0], points[:,1], linewidth=2.0, color=colors[color_num], latlon=True)
 				elif polytype == 'Point':
 					points = np.asarray(coords)
-					map.plot(points[0,0], points[0,1], linewidth=2.0, color=colors[color_num], latlon=True)
+					map.plot(points[0], points[1], markers[marker_num], markersize=20, color=colors[color_num], latlon=True)
 				else:
 					assert False, 'Geometry %s not known.'%(polytype)
 			except:
