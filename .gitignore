@@ -1,4 +1,4 @@
-regions.geojson
+features.geojson
 *.nc
 *.pyc
 *.png

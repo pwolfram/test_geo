@@ -5,6 +5,8 @@
 		 "properties": {
 			"name": "Singapore Strait",
 			"component": "ocean",
+			"tags": "",
+			"author": "http://www.marineregions.org/downloads.php#iho",
 			"object": "region"
 		 },
 		 "geometry":

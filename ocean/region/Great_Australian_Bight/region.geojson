@@ -5,6 +5,8 @@
 		 "properties": {
 			"name": "Great Australian Bight",
 			"component": "ocean",
+			"tags": "",
+			"author": "http://www.marineregions.org/downloads.php#iho",
 			"object": "region"
 		 },
 		 "geometry":

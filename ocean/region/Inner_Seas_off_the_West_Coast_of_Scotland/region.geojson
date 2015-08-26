@@ -5,6 +5,8 @@
 		 "properties": {
 			"name": "Inner Seas off the West Coast of Scotland",
 			"component": "ocean",
+			"tags": "",
+			"author": "http://www.marineregions.org/downloads.php#iho",
 			"object": "region"
 		 },
 		 "geometry":

@@ -5,6 +5,8 @@
 		 "properties": {
 			"name": "Rio de La Plata",
 			"component": "ocean",
+			"tags": "",
+			"author": "http://www.marineregions.org/downloads.php#iho",
 			"object": "region"
 		 },
 		 "geometry":

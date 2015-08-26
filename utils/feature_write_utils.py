@@ -30,11 +30,21 @@ def write_single_feature(feature, out_file, base_indent):#{{{
 		quit(1)
 
 	try:
+		out_file.write('%s\t"tags": "%s",\n'%(base_indent, feature['properties']['tags']))
+	except:
+		out_file.write('%s\t"tags": "",\n'%(base_indent))
+
+	try:
+		out_file.write('%s\t"author": "%s",\n'%(base_indent, feature['properties']['author']))
+	except:
+		out_file.write('%s\t"author": "http://www.marineregions.org/downloads.php#iho",\n'%(base_indent))
+
+	try:
 		feature_type = feature['geometry']['type']
 	except:
 		print "Feature: %s has an issue with the type of geometry. Exiting...\n"%(feature['properties']['name'])
 		quit(1)
-
+	
 	# Determine object property value based on feature type.
 	if feature_type == "Polygon" or feature_type == "MultiPolygon":
 		out_file.write('%s\t"object": "region"\n'%(base_indent))
