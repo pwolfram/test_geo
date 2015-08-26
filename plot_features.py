@@ -31,6 +31,14 @@ def plot_base(maptype): #{{{
 		map = Basemap(llcrnrlon=-180,llcrnrlat=-90,urcrnrlon=180,urcrnrlat=90,projection='mill')
 		map.drawparallels(np.arange(-80,81,20),labels=[1,1,0,0])
 		map.drawmeridians(np.arange(0,360,60),labels=[0,0,0,1])
+	elif maptype == 'robin':
+		map = Basemap(projection='robin',lon_0=0,lat_0=0)
+		map.drawparallels(np.arange(-80,81,20),labels=[1,1,0,0])
+		map.drawmeridians(np.arange(0,360,60),labels=[0,0,0,1])
+	elif maptype == 'robin2':
+		map = Basemap(projection='robin',lon_0=180,lat_0=0)
+		map.drawparallels(np.arange(-80,81,20),labels=[1,1,0,0])
+		map.drawmeridians(np.arange(0,360,60),labels=[0,0,0,1])
 	elif maptype == 'hammer':
 		map = Basemap(projection='hammer',lon_0=180)
 		map.drawmeridians(np.arange(0,360,30))
