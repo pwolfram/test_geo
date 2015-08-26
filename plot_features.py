@@ -103,9 +103,15 @@ def plot_features_file(featurefile, plotname):
 					for poly in coords:
 						points = np.asarray(poly)
 						map.plot(points[:,0], points[:,1], linewidth=2.0, color=colors[color_num], latlon=True)
-				elif polytype == 'Polygon' or polytype == 'LineString':
+                                elif polytype == 'Polygon':
 					points = np.asarray(coords)
-					map.plot(points[:,0], points[:,1], linewidth=2.0, color=colors[color_num], latlon=True)
+                                        map.plot(points[:,0], points[:,1], linewidth=2.0, color=colors[color_num], latlon=True)
+                                elif polytype == 'LineString':
+					points = np.asarray(coords)
+                                        # due to bug in basemap http://stackoverflow.com/questions/31839047/valueerror-in-python-basemap/32252594#32252594
+                                        lons = [points[0,0],points[0,0],points[1,0],points[1,0]]
+                                        lats = [points[0,1],points[0,1],points[1,1],points[1,1]]
+                                        map.plot(lons, lats, linewidth=2.0, color=colors[color_num], latlon=True)
 				elif polytype == 'Point':
 					points = np.asarray(coords)
 					map.plot(points[0], points[1], markers[marker_num], markersize=20, color=colors[color_num], latlon=True)
