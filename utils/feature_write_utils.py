@@ -50,7 +50,8 @@ def write_single_feature(feature, out_file, base_indent):#{{{
 	out_file.write('%s\t{"type": "%s",\n'%(base_indent, feature_type))
 	out_file.write('%s\t "coordinates":\n'%(base_indent))
 
-	out_file.write('%s\t\t[\n'%(base_indent))
+	if not feature_type == "Point":
+		out_file.write('%s\t\t[\n'%(base_indent))
 
 	if feature_type == "MultiPolygon" or feature_type == "MultiLineString":
 		out_file.write('%s\t\t\t[\n'%(base_indent))
@@ -85,7 +86,9 @@ def write_single_feature(feature, out_file, base_indent):#{{{
 
 	if feature_type == "MultiPolygon" or feature_type == "MultiLineString":
 		out_file.write('%s\t\t\t]\n'%(base_indent))
-	out_file.write('%s\t\t]\n'%(base_indent))
+
+	if not feature_type == "Point":
+		out_file.write('%s\t\t]\n'%(base_indent))
 	out_file.write('%s\t}\n'%(base_indent))
 	out_file.write('%s}'%(base_indent))
 

@@ -17,7 +17,7 @@ features.geojson file exists or not before calling this script.
 import sys, os, glob, shutil, numpy
 import json
 import argparse
-from feature_utils.feature_write_utils import *
+from utils.feature_write_utils import *
 
 parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawTextHelpFormatter)
 parser.add_argument("-f", "--feature_file", dest="feature_file", help="Single feature file to append to features.geojson", metavar="FILE")
